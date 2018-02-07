@@ -1,22 +1,18 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const config = require('./config.json')
-const app = express()
 const expressPromise = require('express-promise')
 const Root = require('./lib/root')
+const Bot = require('./lib/bot')
+const app = express()
 
 app.use(bodyParser.json())
-app.use(expressPromise())
 app.use(bodyParser.urlencoded({ extened: true }))
+app.use(expressPromise())
 
 const root = new Root(config['root-app-id'], config['root-app-secret'])
+const bot = new Bot(root)
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.post('/bot', (req, res) => res.json(bot.respond(req.body)))
 
-app.post('/bot', (req, res) => {
-    res.json()
-})
-
-app.get('/models', (req, res) => res.json(root.getModels()))
-
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3000, () => console.log('App listening on port 3000!'))
