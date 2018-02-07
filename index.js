@@ -13,6 +13,8 @@ app.use(expressPromise())
 const root = new Root(config['root-app-id'], config['root-app-secret'])
 const bot = new Bot(root)
 
+app.get('/', (req, res) => res.send('Hello world!'))
+
 app.post('/bot', (req, res) => res.json(bot.respond(req.body)))
 
 app.listen(3000, () => console.log('App listening on port 3000!'))
